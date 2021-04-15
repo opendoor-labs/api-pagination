@@ -41,6 +41,22 @@ describe ApiPagination do
 
             after { ApiPagination.config.include_total = true }
           end
+
+          context 'with an option to not include the total' do
+            context 'and paginating an array' do
+              it 'should not call without_count on the collection' do
+                expect(collection).to_not receive :without_count
+                ApiPagination.paginate(collection, include_total: false)
+              end
+            end
+            context 'and paginating an active record relation' do
+              it 'should call without_count on the relation' do
+                expect(active_record_relation).to receive :without_count
+                ApiPagination.paginate(active_record_relation, include_total: false)
+              end
+            end
+          end
+
         end
 
         describe '.pages_from' do
